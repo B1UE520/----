@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>珍爱生命 · 三 | 她的电子日记</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  :root{
+    --pink:#ff7fa8;
+    --pink-deep:#e8558a;
+    --pink-soft:#ffe6ef;
+    --ink:#4a3540;
+  }
+  html{scroll-behavior:smooth;}
+  body{
+    background:linear-gradient(160deg,#fff6fa 0%,#ffeaf2 42%,#fff2f7 100%);
+    color:var(--ink);
+    font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",-apple-system,"Helvetica Neue",sans-serif;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+    transition:background 5s ease;
+  }
+
+  /* ================= 飘浮小贴纸（背景层） ================= */
+  .floaty{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+  .floaty span{
+    position:absolute;font-size:26px;opacity:.55;
+    animation:floatY 6s ease-in-out infinite;
+    filter:saturate(1.1);
+  }
+  @keyframes floatY{
+    0%,100%{transform:translateY(0) rotate(var(--r,0deg));}
+    50%{transform:translateY(-16px) rotate(var(--r,0deg));}
+  }
+
+  /* ================= 左右边栏 ================= */
+  .side{
+    position:fixed;top:0;bottom:0;width:150px;z-index:5;
+    pointer-events:none;
+    transition:opacity 1.6s ease;
+  }
+  .side.left{left:0;}
+  .side.right{right:0;}
+  .side .sticker{
+    position:absolute;font-size:30px;
+    animation:floatY 5.5s ease-in-out infinite;
+    filter:drop-shadow(0 4px 8px rgba(232,85,138,.18));
+  }
+  .side .s1{top:16%;left:22px;--r:-8deg;}
+  .side .s2{top:38%;left:62px;font-size:24px;--r:10deg;animation-delay:.7s;}
+  .side .s3{top:62%;left:28px;font-size:34px;--r:6deg;animation-delay:1.3s;}
+  .side .s4{top:82%;left:70px;font-size:22px;--r:-14deg;animation-delay:.4s;}
+
+  .side.right .s1{top:20%;right:26px;--r:12deg;}
+  .side.right .s2{top:44%;right:64px;font-size:23px;--r:-10deg;animation-delay:.9s;}
+  .side.right .s3{top:66%;right:30px;font-size:32px;--r:-6deg;animation-delay:1.5s;}
+  .side.right .s4{top:86%;right:72px;font-size:21px;--r:8deg;animation-delay:.2s;}
+
+  /* 留言框 */
+  .note-card{
+    position:absolute;left:14px;bottom:6%;width:122px;
+    background:#fff;border:2px dashed var(--pink-soft);border-radius:14px;
+    padding:11px 12px;font-size:11px;line-height:1.75;color:#a97b8e;
+    box-shadow:0 6px 18px rgba(232,85,138,.10);
+    transform:rotate(-3deg);
+  }
+  .note-card b{display:block;color:var(--pink-deep);font-size:11px;margin-bottom:4px;letter-spacing:.06em;}
+  .side.right .note-card{left:auto;right:14px;transform:rotate(3deg);}
+
+  /* ================= 主体 ================= */
+  main{
+    position:relative;z-index:2;
+    max-width:660px;margin:0 auto;
+    padding:0 26px 150px;
+  }
+
+  .reveal{opacity:0;transform:translateY(26px);
+    transition:opacity 1s cubic-bezier(.2,.7,.2,1),transform 1s cubic-bezier(.2,.7,.2,1);}
+  .reveal.in{opacity:1;transform:none;}
+
+  header{padding:20vh 0 6vh;text-align:center;}
+  .tag{
+    display:inline-block;font-size:11px;letter-spacing:.32em;color:var(--pink-deep);
+    background:#fff;border-radius:999px;padding:7px 18px;margin-bottom:26px;
+    box-shadow:0 4px 14px rgba(232,85,138,.12);
+  }
+  h1{
+    font-size:clamp(30px,5.6vw,46px);font-weight:700;line-height:1.3;letter-spacing:.01em;
+    background:linear-gradient(100deg,#ff8fb4,#e8558a 55%,#ff9ec0);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .subtitle{margin-top:18px;font-size:13px;letter-spacing:.2em;color:#c49aac;}
+
+  /* 日记卡片 */
+  .paper{
+    background:#fff;border-radius:22px;
+    padding:clamp(24px,4.4vw,44px);
+    box-shadow:0 12px 40px rgba(232,85,138,.12),0 2px 8px rgba(232,85,138,.06);
+    margin-top:34px;position:relative;
+    transition:background 4s ease,box-shadow 4s ease;
+  }
+  .paper::before{
+    content:"❤";position:absolute;top:-14px;left:34px;
+    font-size:20px;color:var(--pink);background:#fff;
+    width:36px;height:36px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 4px 14px rgba(232,85,138,.18);
+  }
+
+  .entry{padding-bottom:30px;margin-bottom:30px;border-bottom:1px dashed #ffe0ea;}
+  .entry:last-of-type{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+  .entry-date{
+    font-size:12px;letter-spacing:.16em;color:var(--pink-deep);
+    font-weight:600;margin-bottom:14px;
+  }
+  .entry-date .w{color:#d4b3c1;font-weight:400;margin-left:8px;}
+  .entry p{
+    font-size:15.5px;line-height:2.05;color:#4a3540;margin-bottom:12px;letter-spacing:.01em;
+    transition:color 3s ease;
+  }
+  .entry p.emo{font-size:22px;line-height:1.7;letter-spacing:.18em;margin:14px 0;}
+  .entry p.hi{color:var(--pink-deep);font-weight:600;}
+  .entry p.q{
+    background:#fff5f9;border-left:3px solid var(--pink);
+    padding:12px 16px;border-radius:0 10px 10px 0;color:#a5577a;
+  }
+
+  /* 点赞 */
+  .like-wrap{text-align:center;margin-top:38px;padding-top:28px;border-top:1px dashed #ffe0ea;}
+  .like-btn{
+    display:inline-flex;align-items:center;gap:10px;
+    background:linear-gradient(120deg,#ff9ebe,#e8558a);
+    color:#fff;border:none;border-radius:999px;
+    padding:13px 30px;font-size:14px;letter-spacing:.1em;cursor:pointer;
+    font-family:inherit;
+    box-shadow:0 8px 22px rgba(232,85,138,.28);
+    transition:transform .2s ease,box-shadow .2s ease;
+  }
+  .like-btn:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(232,85,138,.36);}
+  .like-btn:active{transform:scale(.96);}
+  .like-btn .heart{font-size:16px;transition:transform .3s cubic-bezier(.2,1.6,.4,1);}
+  .like-btn.liked .heart{transform:scale(1.5);}
+  .like-hint{margin-top:12px;font-size:11.5px;letter-spacing:.1em;color:#d0aebd;}
+
+  /* ================= 点赞提示框 ================= */
+  .toast{
+    position:fixed;left:50%;bottom:44px;transform:translate(-50%,26px);
+    background:#fff;border:2px solid var(--pink-soft);
+    color:var(--pink-deep);font-size:14px;letter-spacing:.06em;
+    padding:15px 28px;border-radius:999px;
+    box-shadow:0 14px 40px rgba(232,85,138,.24);
+    opacity:0;pointer-events:none;z-index:60;
+    transition:opacity .45s ease,transform .45s cubic-bezier(.2,1.4,.4,1);
+    white-space:nowrap;
+  }
+  .toast.show{opacity:1;transform:translate(-50%,0);}
+
+  .footer{
+    text-align:center;margin-top:90px;font-size:11px;letter-spacing:.28em;color:#dcc0cb;
+  }
+
+  /* ================= 恶化 / 暗化 ================= */
+  body.deteriorate{
+    background:linear-gradient(160deg,#0a0508 0%,#050203 60%,#0b0407 100%);
+  }
+  body.deteriorate .floaty,
+  body.deteriorate .side,
+  body.deteriorate .like-wrap,
+  body.deteriorate .footer,
+  body.deteriorate header .tag,
+  body.deteriorate .subtitle{
+    opacity:0;
+    transition:opacity 2.4s ease;
+  }
+  body.deteriorate .floaty,
+  body.deteriorate .side{pointer-events:none;}
+
+  body.deteriorate .paper{
+    background:#080405;
+    box-shadow:0 12px 40px rgba(120,0,20,.35);
+  }
+  body.deteriorate .paper::before{
+    background:#080405;color:#ff2b3d;box-shadow:0 0 18px rgba(255,40,60,.5);
+  }
+  body.deteriorate h1{
+    background:linear-gradient(100deg,#ff4d5e,#c1121f 55%,#ff5c6c);
+    -webkit-background-clip:text;background-clip:text;
+  }
+  body.deteriorate .entry{border-bottom-color:#3a0d14;}
+  body.deteriorate .entry p,
+  body.deteriorate .entry p.hi,
+  body.deteriorate .entry p.q,
+  body.deteriorate .entry-date{
+    color:#ff2b3d !important;
+    text-shadow:0 0 14px rgba(255,30,50,.55);
+    background:transparent;
+    border-left-color:#8c0f1e;
+  }
+  body.deteriorate .entry p.q{padding-left:16px;}
+
+  /* 颤抖 */
+  @keyframes shakeHard{
+    0%{transform:translate(0,0) rotate(0deg);}
+    20%{transform:translate(-1.6px,1.2px) rotate(-.22deg);}
+    40%{transform:translate(1.6px,-1.2px) rotate(.22deg);}
+    60%{transform:translate(-1.2px,-1.6px) rotate(-.18deg);}
+    80%{transform:translate(1.2px,1.6px) rotate(.18deg);}
+    100%{transform:translate(0,0) rotate(0deg);}
+  }
+  body.deteriorate main{
+    animation:shakeHard .16s infinite;
+  }
+  @keyframes pageGlitch{
+    0%,100%{filter:none;}
+    50%{filter:hue-rotate(-18deg) contrast(1.08);}
+  }
+  body.deteriorate .paper{animation:pageGlitch 3.4s infinite;}
+
+  /* 密码面板 */
+  .dark-panel{
+    position:fixed;inset:0;z-index:80;
+    display:flex;align-items:center;justify-content:center;
+    background:rgba(3,1,2,.82);
+    backdrop-filter:blur(7px);
+    opacity:0;pointer-events:none;
+    transition:opacity 2.2s ease;
+    padding:24px;
+  }
+  .dark-panel.show{opacity:1;pointer-events:auto;}
+
+  .dp-inner{
+    width:100%;max-width:420px;
+    border:1px solid #5c0d18;
+    background:rgba(12,4,6,.9);
+    padding:clamp(26px,5vw,44px);
+    text-align:center;
+    box-shadow:0 0 60px rgba(150,0,20,.45);
+    animation:shakeHard .2s infinite;
+  }
+  .dp-tag{
+    font-size:11px;letter-spacing:.42em;color:#ff3b4d;opacity:.85;margin-bottom:26px;
+  }
+  .dp-title{
+    font-size:clamp(19px,3.6vw,24px);font-weight:600;color:#ff2b3d;
+    letter-spacing:.06em;margin-bottom:12px;
+    text-shadow:0 0 18px rgba(255,30,50,.6);
+  }
+  .dp-sub{
+    font-size:12px;letter-spacing:.2em;color:#a3485a;margin-bottom:30px;
+  }
+  .dp-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;}
+  .dp-row input{
+    flex:1;min-width:170px;
+    background:transparent;border:1px solid #6d1622;
+    color:#ff3b4d;font-size:17px;letter-spacing:.42em;text-align:center;
+    padding:14px 12px;font-family:inherit;outline:none;
+    transition:border-color .3s,box-shadow .3s;
+  }
+  .dp-row input::placeholder{color:#5f2431;letter-spacing:.3em;}
+  .dp-row input:focus{border-color:#ff3b4d;box-shadow:0 0 20px rgba(255,40,60,.35);}
+  .dp-row button{
+    padding:14px 28px;font-size:13px;letter-spacing:.2em;font-family:inherit;
+    background:#b2101f;color:#ffe3e7;border:1px solid #b2101f;cursor:pointer;
+    transition:background .3s,color .3s;
+  }
+  .dp-row button:hover{background:transparent;color:#ff3b4d;border-color:#ff3b4d;}
+  .dp-err{
+    min-height:20px;margin-top:16px;font-size:12.5px;letter-spacing:.1em;color:#ff5a6a;
+  }
+
+  /* ================= 响应式 ================= */
+  @media (max-width:1080px){
+    .side{width:96px;}
+    .side .s2,.side .s4{display:none;}
+    .note-card{display:none;}
+  }
+  @media (max-width:820px){
+    .side{display:none;}
+    main{padding:0 20px 120px;}
+    header{padding:15vh 0 5vh;}
+  }
+</style>
+</head>
+<body>
+
+<!-- 飘浮贴纸 -->
+<div class="floaty" id="floaty"></div>
+
+<!-- 左右边栏 -->
+<aside class="side left">
+  <span class="sticker s1">🌸</span>
+  <span class="sticker s2">🧸</span>
+  <span class="sticker s3">🌷</span>
+  <span class="sticker s4">✨</span>
+  <div class="note-card">
+    <b>💌 匿名留言</b>
+    你们要一直好好的呀，看得我眼泪汪汪。
+  </div>
+</aside>
+
+<aside class="side right">
+  <span class="sticker s1">🎀</span>
+  <span class="sticker s2">🍰</span>
+  <span class="sticker s3">🐰</span>
+  <span class="sticker s4">💕</span>
+  <div class="note-card">
+    <b>💌 匿名留言</b>
+    原来真的有人能赢。谢谢你，让我相信奇迹。
+  </div>
+</aside>
+
+<main>
+
+  <header>
+    <div class="tag reveal">珍 爱 生 命 · 第 三 页</div>
+    <h1 class="reveal">她的电子日记</h1>
+    <div class="subtitle reveal">— 婚后第三年，整理旧文件时发现的 —</div>
+  </header>
+
+  <article class="paper" id="paper">
+
+    <div class="entry reveal">
+      <div class="entry-date">2022.03.04<span class="w">星期五 · 晴</span></div>
+      <p>今天是我生日🎂 老爸说要带我去医院食堂吃饭，因为他值班走不开。我说好啊，反正我也没别的地方去。</p>
+      <p>然后我就在血液内科的走廊上遇见了他。</p>
+      <p>他坐在轮椅上，戴着毛线帽，手里捧着一本《百年孤独》，书角都翻烂了。他抬头看了我一眼，说：“你是陆医生的女儿吧？你俩的眉毛一模一样。”</p>
+      <p class="hi">我说：“你观察得挺仔细啊。”</p>
+      <p>他说：“没办法，住院的人，就剩这点时间可以观察别人了。”</p>
+      <p class="emo">🌷</p>
+    </div>
+
+    <div class="entry reveal">
+      <div class="entry-date">2022.04.19<span class="w">星期二 · 阴</span></div>
+      <p>老爸说他最近状态很好，化疗配合度特别高，扎针从来不喊疼，还反过来安慰隔壁床的小弟弟。</p>
+      <p>我假装随口问了一句：“那他什么时候能出院？”</p>
+      <p>老爸看了我一眼，什么都没说，笑了笑。</p>
+      <p class="q">我爸那个笑，我到现在都记得。是那种“我知道你在想什么”的笑。</p>
+      <p class="emo">🐰✨</p>
+    </div>
+
+    <div class="entry reveal">
+      <div class="entry-date">2022.07.08<span class="w">星期五 · 雨</span></div>
+      <p>今天他做第四次骨穿，我在门外等。出来的时候他脸都白了，还冲我比了个耶✌️</p>
+      <p>我说你逞什么强。</p>
+      <p>他说：“不逞强不行啊，我妈在楼下等着呢。我要是垮了，她怎么办。”</p>
+      <p class="hi">我那天回家哭了一路。我从来没想过，一个十七岁的男孩子，会这么认真地想着“我妈怎么办”。</p>
+      <p class="emo">🌧️💗</p>
+    </div>
+
+    <div class="entry reveal">
+      <div class="entry-date">2023.02.14<span class="w">星期二 · 晴</span></div>
+      <p>他说他今天要跟我表白，但是要先跟我爸报备。</p>
+      <p>我说：“你是不是有病。”</p>
+      <p>他说：“对，我有，你知道的。”</p>
+      <p>……我笑到蹲在地上起不来。</p>
+      <p class="emo">😂💕🎀</p>
+    </div>
+
+    <div class="entry reveal">
+      <div class="entry-date">2023.09.01<span class="w">星期五 · 晴</span></div>
+      <p>MRD 转阴，医生说维持治疗进展顺利，各项指标都在往好的方向走。</p>
+      <p>他拿着化验单在走廊里转圈，转得我头晕。</p>
+      <p class="hi">他说：“我好像真的能活到很老很老。”</p>
+      <p>我说：“那你打算活多老？”</p>
+      <p>他说：“活到看着你长白头发。”</p>
+      <p class="emo">🌈✨</p>
+    </div>
+
+    <div class="entry reveal">
+      <div class="entry-date">2025.03.04<span class="w">星期二 · 晴</span></div>
+      <p>今天又是我生日。他居然记得，还偷偷订了蛋糕🍰</p>
+      <p>他说：“第一次见你也是三月四号，我坐在轮椅上，你扎着马尾，从走廊那头走过来，光都跟着你走。”</p>
+      <p>我说：“你当时不是在看《百年孤独》吗？”</p>
+      <p>他说：“书是道具，我是在看你。”</p>
+      <p class="q">后来我们领了证。婚礼很小，只有两桌人。我爸是主婚人，我妈哭得比我还凶。</p>
+      <p class="emo">🎂💍🌸</p>
+    </div>
+
+    <div class="entry reveal">
+      <div class="entry-date">2026.09.16<span class="w">星期三 · 晴</span></div>
+      <p>停药满一年，复查全部正常。医生说，可以算临床治愈了。</p>
+      <p>他站在医院门口，突然不走了。</p>
+      <p>我问他怎么了。</p>
+      <p class="hi">他说：“我在这儿待了五年。我从这儿活着走出来，还带走了医生的女儿。”</p>
+      <p>我说：“你赚大了。”</p>
+      <p>他说：“嗯，赚大了。”</p>
+      <p class="emo">💕🌷🎀✨</p>
+    </div>
+
+    <!-- 点赞 -->
+    <div class="like-wrap" id="likeWrap">
+      <button class="like-btn" id="likeBtn">
+        <span class="heart">❤️</span>
+        <span>给日记点个赞</span>
+      </button>
+      <div class="like-hint">愿你也被人这样认真地爱着</div>
+    </div>
+
+  </article>
+
+  <div class="footer">珍 爱 生 命 · 第 三 页</div>
+
+</main>
+
+<!-- 点赞提示 -->
+<div class="toast" id="toast">谢谢你点赞呀也祝你幸福</div>
+
+<!-- 暗化后的密码面板 -->
+<div class="dark-panel" id="darkPanel">
+  <div class="dp-inner">
+    <div class="dp-tag">— 病 情 恶 化 —</div>
+    <div class="dp-title">请输入妻子的生日</div>
+    <div class="dp-sub">六位数字 · 年月日</div>
+    <div class="dp-row">
+      <input id="bpwd" type="text" inputmode="numeric" maxlength="6" placeholder="— — — — — —">
+      <button id="bgo">确 认</button>
+    </div>
+    <div class="dp-err" id="berr"></div>
+  </div>
+</div>
+
+<script>
+/* ============ 背景飘浮贴纸 ============ */
+(function(){
+  const box = document.getElementById('floaty');
+  const icons = ['🌸','🌷','✨','🎀','💕','🍰','🐰','💗','🌼','⭐','🧸','🩷'];
+  for(let i=0;i<22;i++){
+    const s = document.createElement('span');
+    s.textContent = icons[Math.floor(Math.random()*icons.length)];
+    s.style.left = (Math.random()*96 + 2) + 'vw';
+    s.style.top  = (Math.random()*96 + 2) + 'vh';
+    s.style.fontSize = (14 + Math.random()*22) + 'px';
+    s.style.opacity = (0.28 + Math.random()*0.4).toFixed(2);
+    s.style.setProperty('--r', (Math.random()*30 - 15).toFixed(1) + 'deg');
+    s.style.animationDelay = (Math.random()*5).toFixed(1) + 's';
+    s.style.animationDuration = (5 + Math.random()*3).toFixed(1) + 's';
+    box.appendChild(s);
+  }
+})();
+
+/* ============ 滚动浮现 ============ */
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+  });
+},{threshold:0.12});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+/* ============ 点赞彩蛋 ============ */
+const likeBtn = document.getElementById('likeBtn');
+const toast   = document.getElementById('toast');
+let toastTimer = null;
+
+likeBtn.addEventListener('click', ()=>{
+  likeBtn.classList.add('liked');
+  toast.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>{ toast.classList.remove('show'); }, 2600);
+  setTimeout(()=>{ likeBtn.classList.remove('liked'); }, 420);
+});
+
+/* ============ 停留后暗化 → 坏结局密码 ============ */
+const DARK_DELAY = 42000;   // 42 秒后触发
+
+setTimeout(()=>{
+  document.body.classList.add('deteriorate');
+  setTimeout(()=>{
+    document.getElementById('darkPanel').classList.add('show');
+  }, 4200);
+}, DARK_DELAY);
+
+/* ============ 密码校验：040304 ============ */
+const bpwd = document.getElementById('bpwd');
+const berr = document.getElementById('berr');
+
+function bCheck(){
+  const v = bpwd.value.replace(/\s/g,'');
+  if(v === '040304'){
+    berr.style.color = '#6dff9a';
+    berr.textContent = '验证通过……';
+    setTimeout(()=>{ window.location.href = 'be.html'; }, 700);
+  }else{
+    berr.textContent = '密码错误。再想想她的生日。';
+    bpwd.value = '';
+  }
+}
+document.getElementById('bgo').addEventListener('click', bCheck);
+bpwd.addEventListener('keydown', e=>{ if(e.key === 'Enter') bCheck(); });
+</script>
+
+</body>
+</html>
