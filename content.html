@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>珍爱生命 · 二 | 主治医生病历报告</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  :root{ --blue:#123a72; --ink:#0b0b0c; --line:#e3e8f0; }
+  html{scroll-behavior:smooth;}
+  body{
+    background:#fff;color:var(--ink);
+    font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",-apple-system,"Helvetica Neue",sans-serif;
+    -webkit-font-smoothing:antialiased;overflow-x:hidden;
+  }
+
+  /* ---------- 几何线条装饰 ---------- */
+  .deco{position:fixed;inset:0;pointer-events:none;z-index:0;}
+  .deco .v1,.deco .v2{position:absolute;top:0;bottom:0;width:1px;
+    background:linear-gradient(180deg,transparent,var(--line) 14%,var(--line) 86%,transparent);}
+  .deco .v1{left:5vw;}
+  .deco .v2{right:5vw;}
+  .deco .c1{position:absolute;right:2.5vw;top:14vh;width:120px;height:120px;
+    border:1px solid #eef2f8;border-radius:50%;}
+  .deco .s1{position:absolute;left:1.6vw;bottom:18vh;width:58px;height:58px;
+    border:1px solid #eef2f8;transform:rotate(18deg);}
+  .deco .s2{position:absolute;right:9vw;bottom:10vh;width:20px;height:20px;background:var(--blue);opacity:.85;}
+  .deco .h1{position:absolute;left:5vw;right:5vw;top:48vh;height:1px;
+    background:linear-gradient(90deg,transparent,#f1f5fa,transparent);}
+
+  main{position:relative;z-index:1;max-width:760px;margin:0 auto;padding:0 30px 160px;}
+
+  /* ---------- 滚动浮现 ---------- */
+  .reveal{opacity:0;transform:translateY(28px);
+    transition:opacity 1.1s cubic-bezier(.2,.7,.2,1),transform 1.1s cubic-bezier(.2,.7,.2,1);}
+  .reveal.in{opacity:1;transform:none;}
+
+  header{padding:22vh 0 7vh;}
+  .tag{font-size:12px;letter-spacing:.36em;color:var(--blue);opacity:.7;margin-bottom:28px;}
+  h1{font-size:clamp(30px,5.4vw,50px);font-weight:600;letter-spacing:.02em;line-height:1.25;}
+  h1 em{font-style:normal;color:var(--blue);}
+  .meta{margin-top:24px;font-size:12px;letter-spacing:.3em;color:#aab2bf;}
+
+  /* ---------- 报告主体 ---------- */
+  .report{
+    border:1px solid var(--line);
+    padding:clamp(22px,4vw,46px);
+    position:relative;
+    background:#fff;
+  }
+  .report::before{
+    content:"";position:absolute;left:0;top:0;width:56px;height:2px;background:var(--blue);
+  }
+  .report-title{
+    font-size:14px;letter-spacing:.3em;color:var(--blue);
+    padding-bottom:18px;border-bottom:1px solid var(--line);margin-bottom:26px;
+  }
+
+  .row{display:flex;flex-wrap:wrap;gap:6px 0;margin-bottom:9px;font-size:14px;line-height:1.9;}
+  .row .k{width:104px;flex:none;color:#98a2b0;letter-spacing:.08em;}
+  .row .v{flex:1;min-width:180px;color:#191b1f;letter-spacing:.02em;}
+  .row .v.hl{color:var(--blue);font-weight:600;}
+
+  h2.sec{
+    font-size:13px;letter-spacing:.24em;color:var(--blue);
+    margin:38px 0 16px;padding-bottom:9px;border-bottom:1px solid var(--line);
+    display:flex;align-items:baseline;gap:12px;
+  }
+  h2.sec span.num{font-size:11px;color:#c3cbd6;letter-spacing:.1em;}
+
+  p.rp{font-size:14.5px;line-height:2.05;color:#20232a;margin-bottom:14px;letter-spacing:.01em;}
+  p.rp.indent{padding-left:1.6em;}
+  p.rp b{color:var(--blue);font-weight:600;}
+
+  ul.rp{margin:0 0 14px 1.4em;font-size:14.5px;line-height:2.05;color:#20232a;}
+  ul.rp li{margin-bottom:4px;}
+
+  /* ---------- 患者留言（藏头诗） ---------- */
+  .notes{margin-top:34px;padding-top:24px;border-top:1px dashed #e6ebf2;}
+  .notes-h{font-size:12px;letter-spacing:.22em;color:#b3bcc8;margin-bottom:18px;}
+  .notes p{
+    font-size:16px;line-height:2.1;color:var(--blue);letter-spacing:.04em;
+    margin-bottom:6px;opacity:.92;
+  }
+
+  /* ---------- 签名 ---------- */
+  .sign{margin-top:40px;padding-top:22px;border-top:1px solid var(--line);
+    font-size:13px;line-height:2.1;color:#5d6773;letter-spacing:.06em;}
+  .sign b{color:var(--blue);font-weight:600;}
+
+  /* ---------- 解锁区 ---------- */
+  .lock{margin-top:70px;padding-top:48px;border-top:1px solid var(--line);}
+  .lock-tip{font-size:13px;letter-spacing:.2em;color:#8b95a4;margin-bottom:20px;}
+  .lock-row{display:flex;gap:14px;flex-wrap:wrap;}
+  .lock-row input{
+    flex:1;min-width:180px;padding:14px 18px;font-size:16px;letter-spacing:.3em;
+    border:1px solid #dde3ec;border-radius:0;background:#fff;color:var(--blue);
+    font-family:inherit;outline:none;transition:border-color .3s;
+  }
+  .lock-row input:focus{border-color:var(--blue);}
+  .lock-row input::placeholder{color:#d3d9e2;letter-spacing:.2em;}
+  .lock-row button{
+    padding:14px 32px;font-size:14px;letter-spacing:.16em;font-family:inherit;
+    background:var(--blue);color:#fff;border:1px solid var(--blue);cursor:pointer;
+    transition:background .3s,color .3s;
+  }
+  .lock-row button:hover{background:#fff;color:var(--blue);}
+  .lock-hint{margin-top:16px;font-size:12px;letter-spacing:.08em;color:#b6bec9;line-height:1.9;}
+  .err{font-size:13px;letter-spacing:.1em;margin-top:12px;min-height:18px;}
+
+  .footer{margin-top:110px;font-size:11px;letter-spacing:.3em;color:#cdd3dc;}
+
+  /* ---------- 右下角实时在线人数 ---------- */
+  .visitor{
+    position:fixed;right:22px;bottom:20px;z-index:9;
+    font-size:11.5px;letter-spacing:.14em;color:#9aa4b2;
+    background:rgba(255,255,255,.86);backdrop-filter:blur(6px);
+    border:1px solid var(--line);padding:8px 14px;
+    display:flex;align-items:center;gap:8px;
+    font-variant-numeric:tabular-nums;
+  }
+  .visitor .dot{
+    width:6px;height:6px;border-radius:50%;background:#3fbf7f;
+    box-shadow:0 0 0 0 rgba(63,191,127,.6);
+    animation:pulse 2.2s infinite;
+  }
+  @keyframes pulse{
+    0%{box-shadow:0 0 0 0 rgba(63,191,127,.5);}
+    70%{box-shadow:0 0 0 7px rgba(63,191,127,0);}
+    100%{box-shadow:0 0 0 0 rgba(63,191,127,0);}
+  }
+  #online{color:var(--blue);font-weight:600;letter-spacing:.06em;}
+
+  @media (max-width:520px){
+    .row .k{width:88px;font-size:13px;}
+    .row .v{font-size:13.5px;}
+    .visitor{right:12px;bottom:12px;padding:7px 11px;font-size:11px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="deco">
+  <div class="v1"></div><div class="v2"></div>
+  <div class="h1"></div>
+  <div class="c1"></div><div class="s1"></div><div class="s2"></div>
+</div>
+
+<main>
+
+  <header class="reveal">
+    <div class="tag">珍 爱 生 命 · 第 二 页</div>
+    <h1>主治医生<em>病历报告</em></h1>
+    <div class="meta">血液内科 · 住院病历 · 编号 1923</div>
+  </header>
+
+  <article class="report">
+
+    <div class="report-title reveal">住 院 病 历 报 告</div>
+
+    <div class="reveal">
+      <div class="row"><div class="k">姓　　名</div><div class="v">林知远</div></div>
+      <div class="row"><div class="k">性　　别</div><div class="v">男</div></div>
+      <div class="row"><div class="k">年　　龄</div><div class="v">16 岁</div></div>
+      <div class="row"><div class="k">病历号</div><div class="v hl">1923</div></div>
+      <div class="row"><div class="k">住院号</div><div class="v">ZY-2021-0916</div></div>
+      <div class="row"><div class="k">科　　室</div><div class="v">血液内科</div></div>
+      <div class="row"><div class="k">入院日期</div><div class="v">2021 年 9 月 16 日</div></div>
+      <div class="row"><div class="k">记录医师</div><div class="v">陆承安</div></div>
+    </div>
+
+    <h2 class="sec reveal"><span>一、主诉</span><span class="num">CHIEF COMPLAINT</span></h2>
+    <p class="rp reveal">发热伴乏力、双下肢皮肤瘀点 3 天。</p>
+
+    <h2 class="sec reveal"><span>二、现病史</span><span class="num">HISTORY OF PRESENT ILLNESS</span></h2>
+    <p class="rp reveal">患者男，16 岁，学生。入院前 3 天无明显诱因出现发热，最高体温 38.9℃，伴全身乏力、食欲减退，双下肢散在针尖样瘀点，无鼻衄、牙龈出血，无骨关节疼痛，无腹痛、腹泻。于外院查血常规示白细胞及血小板异常，为进一步诊治转入我院。</p>
+    <p class="rp reveal">病程中神志清楚，精神欠佳，睡眠可，二便正常，体重无明显变化。</p>
+
+    <h2 class="sec reveal"><span>三、既往史</span><span class="num">PAST HISTORY</span></h2>
+    <p class="rp reveal">既往体健，无肝炎、结核等传染病史，无药物及食物过敏史，无手术外伤史，无输血史。预防接种史按计划完成。家族中无血液系统疾病及恶性肿瘤病史。</p>
+
+    <h2 class="sec reveal"><span>四、体格检查</span><span class="num">PHYSICAL EXAMINATION</span></h2>
+    <p class="rp reveal">T 38.6℃，P 112 次/分，R 22 次/分，BP 102/64 mmHg。神志清楚，发育正常，贫血貌，全身皮肤黏膜无黄染，双下肢可见散在瘀点、瘀斑，压之不褪色。浅表淋巴结未触及肿大。胸骨中下段压痛（+）。双肺呼吸音清，未闻及干湿性啰音。心率 112 次/分，律齐，各瓣膜听诊区未闻及病理性杂音。腹平软，肝肋下未触及，脾肋下约 2 cm 可触及，质软，无压痛。双下肢无水肿，神经系统查体未见异常。</p>
+
+    <h2 class="sec reveal"><span>五、实验室检查</span><span class="num">LABORATORY FINDINGS</span></h2>
+    <p class="rp reveal"><b>血常规（2021-09-16）：</b>WBC 8.7×10⁹/L，外周血涂片分类见幼稚淋巴细胞 32%；Hb 76 g/L，MCV 88 fL；PLT 38×10⁹/L；中性粒细胞绝对值 0.6×10⁹/L。网织红细胞比例 0.8%。</p>
+    <p class="rp reveal"><b>生化检查：</b>LDH 682 U/L（参考范围 120–250 U/L），UA 486 μmol/L；ALT、AST、TBIL、Cr、BUN 均在正常范围。凝血功能：PT 12.8 s，APTT 31.5 s，FIB 2.4 g/L，D-二聚体 0.42 mg/L，均在正常范围。</p>
+    <p class="rp reveal"><b>感染指标：</b>CRP 18.6 mg/L，PCT 0.12 ng/mL；血培养（需氧+厌氧）阴性；EBV、CMV 抗体及核酸均阴性。</p>
+
+    <h2 class="sec reveal"><span>六、骨髓象与免疫分型</span><span class="num">BONE MARROW & IMMUNOPHENOTYPE</span></h2>
+    <p class="rp reveal"><b>骨髓细胞形态学（髂后上棘穿刺，2021-09-17）：</b>有核细胞增生明显活跃，粒红比例倒置；原始及幼稚淋巴细胞占全部有核细胞的 <b>78%</b>，胞体中等，核质比高，核染色质细致，核仁可见，胞质少、呈淡蓝色，无颗粒；红系及巨核系明显受抑，成熟血小板少见。符合急性淋巴细胞白血病骨髓象。</p>
+    <p class="rp reveal"><b>流式细胞术免疫分型：</b>异常细胞群占全部有核细胞的 76.4%，表达 CD19（96.3%）、CD10（91.7%）、CD34（62.4%）、TdT（+）、HLA-DR（+）、CD22（胞质+）；不表达 CD3、CD7、MPO、CD13、CD33。结论：<b>B 系急性淋巴细胞白血病（B-ALL）</b>。</p>
+
+    <h2 class="sec reveal"><span>七、细胞遗传学与分子生物学</span><span class="num">CYTOGENETICS & MOLECULAR</span></h2>
+    <p class="rp reveal"><b>染色体核型分析：</b>46,XY,t(12;21)(p13;q22)[18]/46,XY[2]。</p>
+    <p class="rp reveal"><b>FISH：</b>ETV6-RUNX1 融合基因阳性，阳性细胞比例约 68%。</p>
+    <p class="rp reveal"><b>融合基因筛查：</b>BCR-ABL1（p190/p210/p230）阴性；KMT2A（MLL）重排阴性；TCF3-PBX1 阴性。</p>
+    <p class="rp reveal"><b>拷贝数变异：</b>IKZF1 基因外显子 4–7 缺失阳性。</p>
+
+    <h2 class="sec reveal"><span>八、诊断与危险度分层</span><span class="num">DIAGNOSIS & RISK STRATIFICATION</span></h2>
+    <p class="rp reveal"><b>主要诊断：</b>急性淋巴细胞白血病（B 细胞型，ETV6-RUNX1 融合基因阳性）。</p>
+    <p class="rp reveal"><b>危险度分层：</b>按中国成人 ALL 诊疗指南及儿童 ALL 分层标准综合评估——ETV6-RUNX1 融合基因阳性提示预后相对良好，但患者年龄 ≥15 岁为独立不良预后因素，且合并 IKZF1 缺失，故归入 <b>中危组</b>，需按中危方案治疗并密切监测微小残留病（MRD）。</p>
+
+    <h2 class="sec reveal"><span>九、治疗经过</span><span class="num">TREATMENT COURSE</span></h2>
+    <p class="rp reveal"><b>第 1 疗程 · 诱导缓解（VDLP 方案）：</b>长春新碱 1.4 mg/m²（单次最大 2 mg）静脉注射，d1、d8、d15、d22；柔红霉素 45 mg/m² 静脉滴注，d1–d3；门冬酰胺酶 6000 U/m² 静脉滴注，d3、d5、d7、d9、d11；泼尼松 60 mg/m² 口服，d1–d14，后每 3 日减量 25% 至停药。</p>
+    <p class="rp reveal"><b>第 1 疗程 d15 骨髓象复查：</b>原始及幼稚淋巴细胞降至 <b>3.5%</b>，达形态学完全缓解（CR）。<b>MRD（流式细胞术）：</b>0.08%。</p>
+    <p class="rp reveal"><b>第 2 疗程 · 巩固治疗（CAM 方案）：</b>环磷酰胺 1000 mg/m² 静脉滴注 d1；阿糖胞苷 75 mg/m² 皮下注射，d1–d7；巯嘌呤 60 mg/m² 口服，d1–d14。疗程结束后复查 MRD &lt;0.01%（阴性）。</p>
+    <p class="rp reveal"><b>第 3 疗程 · 大剂量甲氨蝶呤（HD-MTX）：</b>甲氨蝶呤 3 g/m² 静脉滴注 24 小时，滴注结束后 12 小时起予亚叶酸钙 15 mg/m² 每 6 小时一次解救，共 8 次；同时予水化、碱化尿液，监测甲氨蝶呤血药浓度。血药浓度峰值及清除时间均在预期范围内。</p>
+    <p class="rp reveal"><b>维持治疗：</b>巯嘌呤 50 mg/m² 每晚口服，甲氨蝶呤 20 mg/m² 每周口服，配合定期鞘内注射，总疗程计划 24–30 个月。</p>
+    <p class="rp reveal"><b>并发症处理：</b>诱导治疗第 12 天出现中性粒细胞缺乏伴发热（ANC 0.3×10⁹/L，Tmax 39.2℃），血培养阴性，经验性予哌拉西林他唑巴坦联合万古霉素抗感染，5 天后体温降至正常，复查 ANC 回升至 1.2×10⁹/L，停用抗生素。</p>
+
+    <h2 class="sec reveal"><span>十、有创操作与手术记录</span><span class="num">INVASIVE PROCEDURES</span></h2>
+    <ul class="rp reveal">
+      <li><b>骨髓穿刺术（髂后上棘）：</b>共 4 次（2021-09-17、2021-10-02、2021-11-08、2022-01-14）。局部麻醉下操作，穿刺顺利，抽取骨髓液 0.2 mL 涂片，术后局部压迫 5 分钟，无渗血、无感染。</li>
+      <li><b>腰椎穿刺 + 鞘内注射：</b>共 6 次。每次予甲氨蝶呤 12 mg + 阿糖胞苷 30 mg + 地塞米松 5 mg，以生理盐水稀释至 5 mL 缓慢鞘内注入。脑脊液常规、生化及细胞学检查均未见幼稚细胞，中枢神经系统白血病（CNSL）阴性。</li>
+      <li><b>经外周静脉置入中心静脉导管（PICC）置入术：</b>经右侧肘正中静脉置入，导管尖端位于上腔静脉下 1/3，术中、术后无气胸、血肿及导管相关性感染。</li>
+    </ul>
+
+    <h2 class="sec reveal"><span>十一、病程记录（节选）</span><span class="num">PROGRESS NOTES</span></h2>
+    <p class="rp reveal"><b>2021-09-17：</b>患者体温 38.6℃，精神尚可。今日行骨髓穿刺术，术中配合良好，术后无特殊不适。已向患者及家属交代病情、治疗方案及可能风险，签署知情同意书。</p>
+    <p class="rp reveal"><b>2021-10-02：</b>诱导缓解第 15 天，复查骨髓象示原始及幼稚淋巴细胞 3.5%，达完全缓解。患者一般情况改善，乏力减轻，双下肢瘀点较前吸收。继续原方案化疗。</p>
+    <p class="rp reveal"><b>2021-10-12：</b>化疗后骨髓抑制期，ANC 最低 0.3×10⁹/L，出现发热，予经验性抗感染治疗。嘱加强口腔护理、肛周护理，进食无菌饮食，减少探视。</p>
+    <p class="rp reveal"><b>2021-11-08：</b>巩固治疗结束，复查 MRD 阴性。患者毛发脱落明显，情绪波动，已请心理科会诊并予心理疏导。嘱家属多予陪伴鼓励。</p>
+    <p class="rp reveal"><b>2022-01-14：</b>完成第 3 疗程 HD-MTX 治疗，血药浓度监测达标，无严重黏膜炎及肝肾功能损害。复查骨髓象持续完全缓解，MRD 阴性。进入维持治疗阶段，门诊定期随访。</p>
+
+    <h2 class="sec reveal"><span>十二、预后评估</span><span class="num">PROGNOSIS</span></h2>
+    <p class="rp reveal">患者 ETV6-RUNX1 融合基因阳性，属于预后相对良好的分子亚型；诱导缓解顺利，第 15 天即达形态学完全缓解，巩固治疗后 MRD 转阴，提示对化疗敏感。但患者年龄 ≥15 岁、合并 IKZF1 缺失，均为独立不良预后因素，仍需按中危组完成全程化疗，每 3 个月复查骨髓象及 MRD，持续监测至停药后 2 年。总体预后评估：<b>中等偏上，有较大希望获得长期无病生存</b>。</p>
+
+    <!-- 患者手写留言（藏头诗） -->
+    <div class="notes reveal">
+      <div class="notes-h">附：患者手写留言摘录（医生整理）</div>
+      <p>花开了又落，我还想再看一次春天。</p>
+      <p>好想再喝一碗妈妈熬的粥。</p>
+      <p>月亮很亮，病房的窗关不住它。</p>
+      <p>圆不了的梦，就留给明天吧。</p>
+    </div>
+
+    <div class="sign reveal">
+      记录医师：<b>陆承安</b>　（血液内科）<br>
+      审核医师：<b>陆承安</b>　（主任医师）<br>
+      记录日期：2022 年 1 月 14 日
+    </div>
+
+  </article>
+
+  <!-- 解锁区 -->
+  <div class="lock reveal">
+    <div class="lock-tip">输入四个字，翻开下一页 →</div>
+    <div class="lock-row">
+      <input id="pwd" type="text" maxlength="8" placeholder="— — — —">
+      <button id="go">继 续</button>
+    </div>
+    <div class="err" id="err"></div>
+    <div class="lock-hint">提示：答案不在诊断里，而在患者留下的那四句话里。</div>
+  </div>
+
+  <div class="footer">珍 爱 生 命 · 第 二 页</div>
+
+</main>
+
+<!-- 右下角实时访问人数 -->
+<div class="visitor">
+  <span class="dot"></span>
+  当前在线 <span id="online">—</span> 人
+</div>
+
+<script>
+/* ============ 滚动浮现 ============ */
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+  });
+},{threshold:0.1});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+/* ============ 右下角实时在线人数 ============ */
+(function(){
+  const el = document.getElementById('online');
+  let n = 1280 + Math.floor(Math.random()*260);
+  el.textContent = n;
+  setInterval(()=>{
+    n += Math.floor(Math.random()*7) - 3;
+    if(n < 900)  n = 900  + Math.floor(Math.random()*40);
+    if(n > 2200) n = 2200 - Math.floor(Math.random()*40);
+    el.textContent = n;
+  }, 1700);
+})();
+
+/* ============ 密码校验：花好月圆 ============ */
+const pwd = document.getElementById('pwd');
+const err = document.getElementById('err');
+
+function check(){
+  const v = pwd.value.replace(/\s/g,'');
+  if(v === '花好月圆'){
+    err.style.color = '#123a72';
+    err.textContent = '验证通过……';
+    setTimeout(()=>{ window.location.href = 'he.html'; }, 650);
+  }else{
+    err.style.color = '#c0392b';
+    err.textContent = '不对哦。再看一眼那四句话的开头。';
+    pwd.value = '';
+  }
+}
+document.getElementById('go').addEventListener('click', check);
+pwd.addEventListener('keydown', e=>{ if(e.key === 'Enter') check(); });
+</script>
+
+</body>
+</html>
