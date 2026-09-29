@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>珍爱生命 · 二 | 主治医生病历报告</title>
+<title>病隙碎笔 · 二 | 主治医生病历报告</title>
 <style>
   *{margin:0;padding:0;box-sizing:border-box;}
   :root{ --blue:#123a72; --ink:#0b0b0c; --line:#e3e8f0; }
@@ -149,7 +149,7 @@
 <main>
 
   <header class="reveal">
-    <div class="tag">珍 爱 生 命 · 第 二 页</div>
+    <div class="tag">病 隙 碎 笔 · 第 二 页</div>
     <h1>主治医生<em>病历报告</em></h1>
     <div class="meta">血液内科 · 住院病历 · 编号 1923</div>
   </header>
@@ -173,7 +173,7 @@
     <p class="rp reveal">发热伴乏力、双下肢皮肤瘀点 3 天。</p>
 
     <h2 class="sec reveal"><span>二、现病史</span><span class="num">HISTORY OF PRESENT ILLNESS</span></h2>
-    <p class="rp reveal">患者男，16 岁，学生。入院前 3 天无明显诱因出现发热，最高体温 38.9℃，伴全身乏力、食欲减退，双下肢散在针尖样瘀点，无鼻衄、牙龈出血，无骨关节疼痛，无腹痛、腹泻。于外院查血常规示白细胞及血小板异常，为进一步诊治转入我院。</p>
+    <p class="rp reveal">患者男，19 岁，学生。入院前 3 天无明显诱因出现发热，最高体温 38.9℃，伴全身乏力、食欲减退，双下肢散在针尖样瘀点，无鼻衄、牙龈出血，无骨关节疼痛，无腹痛、腹泻。于外院查血常规示白细胞及血小板异常，为进一步诊治转入我院。</p>
     <p class="rp reveal">病程中神志清楚，精神欠佳，睡眠可，二便正常，体重无明显变化。</p>
 
     <h2 class="sec reveal"><span>三、既往史</span><span class="num">PAST HISTORY</span></h2>
@@ -226,7 +226,7 @@
     <h2 class="sec reveal"><span>十二、预后评估</span><span class="num">PROGNOSIS</span></h2>
     <p class="rp reveal">患者 ETV6-RUNX1 融合基因阳性，属于预后相对良好的分子亚型；诱导缓解顺利，第 15 天即达形态学完全缓解，巩固治疗后 MRD 转阴，提示对化疗敏感。但患者年龄 ≥15 岁、合并 IKZF1 缺失，均为独立不良预后因素，仍需按中危组完成全程化疗，每 3 个月复查骨髓象及 MRD，持续监测至停药后 2 年。总体预后评估：<b>中等偏上，有较大希望获得长期无病生存</b>。</p>
 
-    <!-- 患者手写留言（藏头诗） -->
+    <!-- 患者留言记录 -->
     <div class="notes reveal">
       <div class="notes-h">附：患者手写留言摘录（医生整理）</div>
       <p>花开了又落，我还想再看一次春天。</p>
@@ -245,16 +245,16 @@
 
   <!-- 解锁区 -->
   <div class="lock reveal">
-    <div class="lock-tip">输入四个字，翻开下一页 →</div>
+    <div class="lock-tip">他的愿望是 →</div>
     <div class="lock-row">
       <input id="pwd" type="text" maxlength="8" placeholder="— — — —">
       <button id="go">继 续</button>
     </div>
     <div class="err" id="err"></div>
-    <div class="lock-hint">提示：答案不在诊断里，而在患者留下的那四句话里。</div>
+    <div class="lock-hint">提示：再读一读他的话吧。</div>
   </div>
 
-  <div class="footer">珍 爱 生 命 · 第 二 页</div>
+  <div class="footer">病 隙 碎 笔 · 第 二 页</div>
 
 </main>
 
@@ -298,7 +298,7 @@ function check(){
     setTimeout(()=>{ window.location.href = 'he.html'; }, 650);
   }else{
     err.style.color = '#c0392b';
-    err.textContent = '不对哦。再看一眼那四句话的开头。';
+    err.textContent = '不对哦。再看看他。';
     pwd.value = '';
   }
 }
