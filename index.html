@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>珍爱生命 · 一 | 母亲的自述</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  :root{ --blue:#123a72; --ink:#0b0b0c; }
+  html{scroll-behavior:smooth;}
+  body{
+    background:#fff;color:var(--ink);
+    font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",-apple-system,"Helvetica Neue",sans-serif;
+    -webkit-font-smoothing:antialiased;overflow-x:hidden;
+  }
+
+  /* ---------- 几何线条装饰 ---------- */
+  .deco{position:fixed;inset:0;pointer-events:none;z-index:0;}
+  .deco .v1,.deco .v2{position:absolute;top:0;bottom:0;width:1px;
+    background:linear-gradient(180deg,transparent,#e3e8f0 14%,#e3e8f0 86%,transparent);}
+  .deco .v1{left:5vw;}
+  .deco .v2{right:5vw;}
+  .deco .c1{position:absolute;right:2.5vw;top:16vh;width:130px;height:130px;
+    border:1px solid #eaeef5;border-radius:50%;}
+  .deco .s1{position:absolute;left:1.6vw;bottom:20vh;width:64px;height:64px;
+    border:1px solid #eaeef5;transform:rotate(18deg);}
+  .deco .s2{position:absolute;right:9vw;bottom:12vh;width:22px;height:22px;background:var(--blue);opacity:.85;}
+  .deco .h1{position:absolute;left:5vw;right:5vw;top:52vh;height:1px;
+    background:linear-gradient(90deg,transparent,#eef2f8,transparent);}
+
+  main{position:relative;z-index:1;max-width:720px;margin:0 auto;padding:0 30px 140px;}
+
+  /* ---------- 滚动浮现 ---------- */
+  .reveal{opacity:0;transform:translateY(30px);
+    transition:opacity 1.15s cubic-bezier(.2,.7,.2,1),transform 1.15s cubic-bezier(.2,.7,.2,1);}
+  .reveal.in{opacity:1;transform:none;}
+
+  header{padding:24vh 0 9vh;}
+  .tag{font-size:12px;letter-spacing:.36em;color:var(--blue);opacity:.7;margin-bottom:30px;}
+  h1{font-size:clamp(34px,6vw,56px);font-weight:600;letter-spacing:.02em;line-height:1.25;}
+  h1 em{font-style:normal;color:var(--blue);}
+  .meta{margin-top:28px;font-size:12px;letter-spacing:.3em;color:#aab2bf;}
+
+  p.txt{font-size:17px;line-height:2.2;letter-spacing:.02em;color:#191b1f;margin-bottom:2.3em;}
+  p.txt.b{color:var(--blue);font-weight:500;}
+  p.txt.q{font-size:19px;color:var(--blue);padding-left:20px;border-left:2px solid #dbe3f0;}
+
+  /* ---------- 隐藏病历号 ---------- */
+  .secret-zone{position:relative;height:300px;margin:40px 0 20px;}
+  .secret{
+    position:absolute;left:50%;top:50%;
+    transform:translate(-50%,-50%) rotate(-4deg);
+    font-size:clamp(20px,3.2vw,32px);
+    font-weight:600;
+    letter-spacing:.55em;
+    white-space:nowrap;
+    pointer-events:none;
+    user-select:none;
+  }
+  .hc{color:#ffffff;transition:color .35s ease,text-shadow .35s ease;display:inline-block;}
+  .hc.revealed{color:var(--blue);text-shadow:0 0 18px rgba(18,58,114,.25);}
+  .whisper{
+    position:absolute;bottom:10px;left:50%;transform:translateX(-50%);
+    font-size:11px;letter-spacing:.24em;color:#d5dae2;white-space:nowrap;
+  }
+
+  /* ---------- 解锁区 ---------- */
+  .lock{margin-top:80px;padding-top:52px;border-top:1px solid #eceff5;}
+  .lock-tip{font-size:13px;letter-spacing:.2em;color:#8b95a4;margin-bottom:22px;}
+  .lock-row{display:flex;gap:14px;flex-wrap:wrap;}
+  .lock-row input{
+    flex:1;min-width:180px;padding:14px 18px;font-size:16px;letter-spacing:.3em;
+    border:1px solid #dde3ec;border-radius:0;background:#fff;color:var(--blue);
+    font-family:inherit;outline:none;transition:border-color .3s;
+  }
+  .lock-row input:focus{border-color:var(--blue);}
+  .lock-row input::placeholder{color:#d3d9e2;letter-spacing:.2em;}
+  .lock-row button{
+    padding:14px 32px;font-size:14px;letter-spacing:.16em;font-family:inherit;
+    background:var(--blue);color:#fff;border:1px solid var(--blue);cursor:pointer;
+    transition:background .3s,color .3s;
+  }
+  .lock-row button:hover{background:#fff;color:var(--blue);}
+  .lock-hint{margin-top:18px;font-size:12px;letter-spacing:.08em;color:#b6bec9;line-height:1.9;}
+  .err{color:#c0392b;font-size:13px;letter-spacing:.1em;margin-top:14px;min-height:18px;}
+  .footer{margin-top:120px;font-size:11px;letter-spacing:.3em;color:#cdd3dc;}
+</style>
+</head>
+<body>
+
+<div class="deco">
+  <div class="v1"></div><div class="v2"></div>
+  <div class="h1"></div>
+  <div class="c1"></div><div class="s1"></div><div class="s2"></div>
+</div>
+
+<main>
+
+  <header class="reveal">
+    <div class="tag">珍 爱 生 命 · 第 一 页</div>
+    <h1>母亲的<em>自述</em></h1>
+    <div class="meta">2021 — 2025</div>
+  </header>
+
+  <section class="paras">
+
+    <p class="txt reveal">他三岁那年，能把一整本《唐诗三百首》从头背到尾。</p>
+
+    <p class="txt reveal">邻居都说，这孩子是神童。我嘴上说着“哪里哪里”，心里却偷偷地骄傲了很多年。</p>
+
+    <p class="txt reveal">五岁，他自己琢磨会了乘法表；七岁，他把我的旧收音机拆开，又一颗螺丝不差地装了回去。</p>
+
+    <p class="txt reveal">我那时候总想，我这一辈子，大概就是看着他长大了。</p>
+
+    <p class="txt reveal">他十六岁，考上了市里最好的高中。开学前一晚，他有点发热。</p>
+
+    <p class="txt reveal">我给他煮了姜汤，说，睡一觉就好了。</p>
+
+    <p class="txt reveal">三天后，烧没退。</p>
+
+    <p class="txt reveal">血常规的单子上，好几个箭头，红得刺眼。</p>
+
+    <p class="txt reveal">医生把我叫到走廊尽头。那条走廊很白，白得晃眼。</p>
+
+    <p class="txt reveal">他说了很长的一段话，我一句都没听懂，只记住了一个词。</p>
+
+    <p class="txt b reveal">急性淋巴细胞白血病。</p>
+
+    <p class="txt reveal">我扶着墙，站了很久。</p>
+
+    <p class="txt reveal">后来我才知道，那天的病历本封面，印着一串编号。</p>
+
+  </section>
+
+  <!-- 隐藏文本：病历号 1923 -->
+  <div class="secret-zone">
+    <div class="secret" id="secret">
+      <span class="hc">病</span><span class="hc">历</span><span class="hc">号</span><span class="hc">1</span><span class="hc">9</span><span class="hc">2</span><span class="hc">3</span>
+    </div>
+    <div class="whisper">（ 按住鼠标右键，在留白处缓缓拖动 ）</div>
+  </div>
+
+  <section class="paras">
+
+    <p class="txt reveal">他问我：妈，我是不是要死了？</p>
+
+    <p class="txt reveal">我说：不会的，你还要考大学呢。</p>
+
+    <p class="txt reveal">他笑了笑，说：那我先把暑假作业写完。</p>
+
+    <p class="txt reveal">那天夜里，我在阳台上哭得像个孩子。第二天早上，我洗干净脸，给他熬了粥。</p>
+
+    <p class="txt reveal">后来他剃光了头发，身上插满了管子。</p>
+
+    <p class="txt reveal">他把最粗的那根管子叫做“我的小尾巴”。</p>
+
+    <p class="txt q reveal">他说：妈，你别怕，我很勇敢的。</p>
+
+    <p class="txt b reveal">他真的很勇敢。比我想象中，勇敢得多。</p>
+
+    <p class="txt reveal">—— 未完待续 ——</p>
+
+  </section>
+
+  <div class="lock reveal">
+    <div class="lock-tip">输入病历号，继续阅读 →</div>
+    <div class="lock-row">
+      <input id="pwd" type="text" inputmode="numeric" maxlength="8" placeholder="— — — —">
+      <button id="go">继 续</button>
+    </div>
+    <div class="err" id="err"></div>
+    <div class="lock-hint">提示：那串编号，就藏在这一页的白纸白字之间。</div>
+  </div>
+
+  <div class="footer">珍 爱 生 命 · 第 一 页</div>
+
+</main>
+
+<script>
+/* ============ 滚动浮现 ============ */
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+  });
+},{threshold:0.12});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+/* ============ 隐藏文字：右键长按拖动 ============ */
+document.addEventListener('contextmenu', e => e.preventDefault());
+
+const chars = Array.from(document.querySelectorAll('.hc'));
+let pressing = false;
+
+function revealNear(x, y){
+  const R = 74;
+  chars.forEach(el=>{
+    if(el.classList.contains('revealed')) return;
+    const r = el.getBoundingClientRect();
+    const cx = r.left + r.width/2;
+    const cy = r.top + r.height/2;
+    if(Math.hypot(x-cx, y-cy) < R) el.classList.add('revealed');
+  });
+}
+
+document.addEventListener('mousedown', e=>{ if(e.button===2) pressing = true; });
+document.addEventListener('mouseup',   e=>{ if(e.button===2) pressing = false; });
+document.addEventListener('mousemove', e=>{ if(pressing) revealNear(e.clientX, e.clientY); });
+
+/* 触屏兜底 */
+document.addEventListener('touchstart', e=>{
+  pressing = true;
+  const t = e.touches[0]; revealNear(t.clientX, t.clientY);
+},{passive:true});
+document.addEventListener('touchmove', e=>{
+  const t = e.touches[0]; revealNear(t.clientX, t.clientY);
+},{passive:true});
+document.addEventListener('touchend', ()=>{ pressing = false; });
+
+/* ============ 密码校验 ============ */
+const pwd = document.getElementById('pwd');
+const err = document.getElementById('err');
+
+function check(){
+  const v = pwd.value.trim();
+  if(v === '1923'){
+    err.style.color = '#123a72';
+    err.textContent = '验证通过……';
+    setTimeout(()=>{ window.location.href = 'content.html'; }, 650);
+  }else{
+    err.style.color = '#c0392b';
+    err.textContent = '病历号不正确。再找找看？';
+    pwd.value = '';
+  }
+}
+document.getElementById('go').addEventListener('click', check);
+pwd.addEventListener('keydown', e=>{ if(e.key === 'Enter') check(); });
+</script>
+
+</body>
+</html>
