@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>珍爱生命 · 四 | 母亲的日记</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  :root{ --blue:#123a72; --ink:#0b0b0c; --line:#e3e8f0; }
+  html{scroll-behavior:smooth;}
+  body{
+    background:#fff;color:var(--ink);
+    font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",-apple-system,"Helvetica Neue",sans-serif;
+    -webkit-font-smoothing:antialiased;overflow-x:hidden;
+  }
+
+  /* ---------- 几何线条装饰（与第一页一致） ---------- */
+  .deco{position:fixed;inset:0;pointer-events:none;z-index:0;}
+  .deco .v1,.deco .v2{position:absolute;top:0;bottom:0;width:1px;
+    background:linear-gradient(180deg,transparent,var(--line) 14%,var(--line) 86%,transparent);}
+  .deco .v1{left:5vw;}
+  .deco .v2{right:5vw;}
+  .deco .c1{position:absolute;right:2.5vw;top:16vh;width:130px;height:130px;
+    border:1px solid #eaeef5;border-radius:50%;}
+  .deco .s1{position:absolute;left:1.6vw;bottom:20vh;width:64px;height:64px;
+    border:1px solid #eaeef5;transform:rotate(18deg);}
+  .deco .s2{position:absolute;right:9vw;bottom:12vh;width:22px;height:22px;background:var(--blue);opacity:.85;}
+  .deco .h1{position:absolute;left:5vw;right:5vw;top:52vh;height:1px;
+    background:linear-gradient(90deg,transparent,#eef2f8,transparent);}
+
+  main{position:relative;z-index:1;max-width:720px;margin:0 auto;padding:0 30px 140px;}
+
+  /* ---------- 滚动浮现 ---------- */
+  .reveal{opacity:0;transform:translateY(30px);
+    transition:opacity 1.15s cubic-bezier(.2,.7,.2,1),transform 1.15s cubic-bezier(.2,.7,.2,1);}
+  .reveal.in{opacity:1;transform:none;}
+
+  header{padding:22vh 0 8vh;}
+  .tag{font-size:12px;letter-spacing:.36em;color:var(--blue);opacity:.7;margin-bottom:30px;}
+  h1{font-size:clamp(32px,5.8vw,54px);font-weight:600;letter-spacing:.02em;line-height:1.25;}
+  h1 em{font-style:normal;color:var(--blue);}
+  .meta{margin-top:26px;font-size:12px;letter-spacing:.3em;color:#aab2bf;}
+
+  p.txt{font-size:17px;line-height:2.2;letter-spacing:.02em;color:#191b1f;margin-bottom:2.3em;}
+  p.txt.b{color:var(--blue);font-weight:500;}
+  p.txt.q{font-size:19px;color:var(--blue);padding-left:20px;border-left:2px solid #dbe3f0;}
+
+  .divider{height:1px;background:linear-gradient(90deg,transparent,#e8edf4,transparent);margin:70px 0;}
+
+  /* ---------- 死亡医学证明书 ---------- */
+  .cert-wrap{margin:20px 0 60px;}
+  .cert-tip{font-size:12px;letter-spacing:.24em;color:#aab4c2;margin-bottom:18px;}
+
+  .cert{
+    position:relative;
+    background:#fff;
+    border:1px solid #ccd4e0;
+    padding:clamp(22px,4vw,42px);
+    font-family:"Songti SC","STSong","SimSun",Georgia,serif;
+    box-shadow:0 10px 34px rgba(20,40,80,.07);
+    background-image:
+      repeating-linear-gradient(0deg, rgba(18,58,114,.014) 0 1px, transparent 1px 4px);
+  }
+  .cert::after{
+    content:"";position:absolute;inset:6px;border:1px solid #e6ebf2;pointer-events:none;
+  }
+
+  .cert-head{text-align:center;padding-bottom:20px;border-bottom:2px solid #123a72;margin-bottom:24px;}
+  .cert-head .cn{
+    font-size:clamp(18px,3vw,24px);font-weight:700;color:#123a72;letter-spacing:.22em;
+  }
+  .cert-head .en{
+    margin-top:8px;font-size:10px;letter-spacing:.2em;color:#98a4b6;
+    font-family:"Helvetica Neue",Arial,sans-serif;
+  }
+
+  .cert-table{width:100%;border-collapse:collapse;font-size:14px;}
+  .cert-table td{
+    border:1px solid #d5dce6;padding:9px 11px;line-height:1.75;vertical-align:middle;
+  }
+  .cert-table td.lb{
+    width:104px;background:#f7f9fc;color:#5b6879;letter-spacing:.1em;
+    font-size:13px;white-space:nowrap;
+  }
+  .cert-table td.vl{color:#1b2330;letter-spacing:.03em;}
+  .cert-table td.vl.strong{color:#123a72;font-weight:700;letter-spacing:.06em;}
+  .cert-table td.vl.red{color:#a1121f;font-weight:700;letter-spacing:.04em;}
+
+  .cert-foot{
+    margin-top:30px;display:flex;justify-content:space-between;
+    align-items:flex-end;gap:24px;flex-wrap:wrap;
+    font-size:13.5px;color:#3d4a5c;line-height:2.1;
+  }
+  .cert-foot .r{text-align:right;}
+
+  /* 红章 */
+  .stamp{
+    position:absolute;right:clamp(16px,4vw,46px);bottom:clamp(20px,5vw,48px);
+    width:118px;height:118px;border-radius:50%;
+    border:3px solid rgba(190,30,45,.62);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    transform:rotate(-13deg);
+    color:rgba(190,30,45,.68);
+    font-family:"Songti SC","STSong",serif;
+    font-size:11px;line-height:1.5;letter-spacing:.06em;text-align:center;
+    opacity:.86;pointer-events:none;
+  }
+  .stamp::before{
+    content:"";position:absolute;inset:8px;border-radius:50%;
+    border:1px solid rgba(190,30,45,.42);
+  }
+  .stamp .star{font-size:15px;margin:3px 0;}
+
+  /* ---------- 母亲背影照 ---------- */
+  .photo-wrap{margin:70px 0 60px;display:flex;justify-content:center;}
+  .photo{
+    width:min(340px,86vw);
+    background:#fff;
+    padding:14px 14px 56px;
+    box-shadow:0 14px 40px rgba(20,40,80,.14),0 2px 8px rgba(20,40,80,.06);
+    transform:rotate(-2.2deg);
+    position:relative;
+  }
+  .photo svg{display:block;width:100%;height:auto;}
+  .photo .cap{
+    position:absolute;left:0;right:0;bottom:18px;text-align:center;
+    font-family:"Songti SC","STSong",serif;
+    font-size:12.5px;color:#8d99a9;letter-spacing:.16em;
+  }
+  .photo .tape{
+    position:absolute;top:-11px;left:50%;transform:translateX(-50%) rotate(-1.5deg);
+    width:88px;height:24px;background:rgba(18,58,114,.09);
+    border-left:1px solid rgba(18,58,114,.12);
+    border-right:1px solid rgba(18,58,114,.12);
+  }
+
+  /* ---------- 声音按钮 ---------- */
+  .sound-btn{
+    position:fixed;left:22px;bottom:20px;z-index:20;
+    background:#fff;border:1px solid var(--line);color:var(--blue);
+    font-family:inherit;font-size:11.5px;letter-spacing:.18em;
+    padding:10px 18px;cursor:pointer;border-radius:999px;
+    box-shadow:0 6px 20px rgba(20,40,80,.08);
+    transition:opacity .8s ease,transform .3s ease;
+  }
+  .sound-btn:hover{transform:translateY(-2px);}
+  .sound-btn.hide{opacity:0;pointer-events:none;transform:translateY(10px);}
+
+  .footer{margin-top:120px;font-size:11px;letter-spacing:.3em;color:#cdd3dc;text-align:center;}
+
+  /* ---------- 收尾 ---------- */
+  .final{
+    position:fixed;inset:0;z-index:95;background:#fff;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:26px;padding:30px;text-align:center;
+    opacity:0;pointer-events:none;
+    transition:opacity 3.4s ease;
+  }
+  .final.on{opacity:1;pointer-events:auto;}
+  .final .f-line{
+    font-size:clamp(15px,2.6vw,20px);line-height:2.1;letter-spacing:.3em;
+    color:var(--blue);font-weight:500;
+    opacity:0;transform:translateY(14px);
+    transition:opacity 2s ease,transform 2s cubic-bezier(.2,.7,.2,1);
+  }
+  .final.on .f-line{opacity:1;transform:none;}
+  .final.on .f-line:nth-child(1){transition-delay:.9s;}
+  .final.on .f-line:nth-child(2){transition-delay:1.7s;}
+  .final.on .f-line:nth-child(3){transition-delay:2.5s;}
+  .final.on .f-line:nth-child(4){transition-delay:3.3s;}
+  .final .f-rule{
+    width:56px;height:1px;background:#cfd9e6;
+    opacity:0;transition:opacity 2s ease 4s;
+  }
+  .final.on .f-rule{opacity:1;}
+
+  @media (max-width:560px){
+    .cert-table td.lb{width:82px;font-size:12px;padding:7px 8px;}
+    .cert-table td{padding:7px 8px;font-size:13px;}
+    .stamp{width:92px;height:92px;font-size:9.5px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="deco">
+  <div class="v1"></div><div class="v2"></div>
+  <div class="h1"></div>
+  <div class="c1"></div><div class="s1"></div><div class="s2"></div>
+</div>
+
+<main>
+
+  <header class="reveal">
+    <div class="tag">珍 爱 生 命 · 第 四 页</div>
+    <h1>母亲的<em>日记</em></h1>
+    <div class="meta">最 后 一 页</div>
+  </header>
+
+  <section class="paras">
+
+    <p class="txt reveal">他走的那天，是三月四号。</p>
+
+    <p class="txt reveal">那天早上他还跟我说，妈，今天是你儿媳妇生日，你帮我想想送什么。</p>
+
+    <p class="txt reveal">我说，你先把自己的身体养好。</p>
+
+    <p class="txt reveal">他说，好。</p>
+
+    <p class="txt reveal">那是他跟我说的最后一个字。</p>
+
+    <p class="txt reveal">下午两点十七分，监护仪变成了一条直线。</p>
+
+    <p class="txt b reveal">他十七岁。</p>
+
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ============ 死亡医学证明书 ============ -->
+  <div class="cert-wrap reveal">
+    <div class="cert-tip">— 附：居民死亡医学证明（推断）书 —</div>
+
+    <div class="cert">
+      <div class="cert-head">
+        <div class="cn">居民死亡医学证明（推断）书</div>
+        <div class="en">MEDICAL CERTIFICATE OF DEATH</div>
+      </div>
+
+      <table class="cert-table">
+        <tr>
+          <td class="lb">姓　　名</td>
+          <td class="vl">林知远</td>
+          <td class="lb">性　　别</td>
+          <td class="vl">男</td>
+        </tr>
+        <tr>
+          <td class="lb">民　　族</td>
+          <td class="vl">汉族</td>
+          <td class="lb">年　　龄</td>
+          <td class="vl">17 岁</td>
+        </tr>
+        <tr>
+          <td class="lb">身份证号</td>
+          <td class="vl" colspan="3">3201**********0517</td>
+        </tr>
+        <tr>
+          <td class="lb">住　　址</td>
+          <td class="vl" colspan="3">××市 ×× 区 ×× 路 128 号 3 幢 502 室</td>
+        </tr>
+        <tr>
+          <td class="lb">住院病历号</td>
+          <td class="vl strong">1923</td>
+          <td class="lb">住院号</td>
+          <td class="vl">ZY-2021-0916</td>
+        </tr>
+        <tr>
+          <td class="lb">死亡时间</td>
+          <td class="vl">2022 年 3 月 4 日 14 时 17 分</td>
+          <td class="lb">死亡地点</td>
+          <td class="vl">本院血液内科病区</td>
+        </tr>
+        <tr>
+          <td class="lb">直接死因</td>
+          <td class="vl red" colspan="3">
+            急性呼吸窘迫综合征；弥散性血管内凝血
+          </td>
+        </tr>
+        <tr>
+          <td class="lb">根本死因</td>
+          <td class="vl red" colspan="3">
+            急性淋巴细胞白血病（B 细胞型，ETV6-RUNX1 融合基因阳性，中危组）
+            <br>—— 诱导缓解后复发，化疗耐药，合并重症肺部感染
+          </td>
+        </tr>
+        <tr>
+          <td class="lb">死亡诊断</td>
+          <td class="vl" colspan="3">
+            1. 急性淋巴细胞白血病（复发，难治）<br>
+            2. 重症肺炎（鲍曼不动杆菌 + 曲霉混合感染）<br>
+            3. 急性呼吸窘迫综合征<br>
+            4. 弥散性血管内凝血<br>
+            5. 多器官功能衰竭
+          </td>
+        </tr>
+      </table>
+
+      <div class="cert-foot">
+        <div class="l">
+          填报医师：陆承安<br>
+          填报日期：2022 年 3 月 4 日
+        </div>
+        <div class="r">
+          医疗机构：××市第一人民医院<br>
+          联系电话：0××× - 8××× 1923
+        </div>
+      </div>
+
+      <div class="stamp">
+        <span>××市第一人民医院</span>
+        <span class="star">★</span>
+        <span>死亡证明专用章</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 母亲背影照 ============ -->
+  <div class="photo-wrap reveal">
+    <div class="photo">
+      <div class="tape"></div>
+      <svg viewBox="0 0 400 320" preserveAspectRatio="xMidYMid slice" role="img"
+           aria-label="母亲在病房走廊的背影">
+        <defs>
+          <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#e8eef6"/>
+            <stop offset="0.55" stop-color="#cfdae8"/>
+            <stop offset="1" stop-color="#a9b8cc"/>
+          </linearGradient>
+          <linearGradient id="fig" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#333c4d"/>
+            <stop offset="1" stop-color="#11161f"/>
+          </linearGradient>
+          <linearGradient id="floor" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#b9c6d8"/>
+            <stop offset="1" stop-color="#8b9cb3"/>
+          </linearGradient>
+          <radialGradient id="vig" cx="0.5" cy="0.46" r="0.78">
+            <stop offset="0.5" stop-color="#000" stop-opacity="0"/>
+            <stop offset="1" stop-color="#0b1424" stop-opacity="0.4"/>
+          </radialGradient>
+          <filter id="soft"><feGaussianBlur stdDeviation="1.4"/></filter>
+          <filter id="grain">
+            <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3"/>
+            <feColorMatrix type="saturate" values="0"/>
+          </filter>
+        </defs>
+
+        <!-- 走廊背景 -->
+        <rect width="400" height="320" fill="url(#bg)"/>
+        <!-- 透视线 -->
+        <path d="M0 40 L400 78" stroke="#bdcadd" stroke-width="1" opacity=".7"/>
+        <path d="M0 130 L400 152" stroke="#bdcadd" stroke-width="1" opacity=".55"/>
+        <path d="M0 320 L400 258" fill="url(#floor)" opacity=".55"/>
+        <!-- 门框 -->
+        <rect x="300" y="72" width="74" height="150" fill="none" stroke="#9fb0c6" stroke-width="1.4" opacity=".7"/>
+        <rect x="316" y="88" width="42" height="118" fill="#dfe7f1" opacity=".7"/>
+        <rect x="26" y="86" width="66" height="140" fill="none" stroke="#9fb0c6" stroke-width="1.4" opacity=".6"/>
+        <!-- 窗 -->
+        <rect x="120" y="52" width="120" height="70" fill="#f2f6fb" opacity=".8"/>
+        <line x1="180" y1="52" x2="180" y2="122" stroke="#c3d0e0" stroke-width="1"/>
+        <line x1="120" y1="87" x2="240" y2="87" stroke="#c3d0e0" stroke-width="1"/>
+
+        <!-- 母亲背影 -->
+        <g filter="url(#soft)">
+          <!-- 头与发髻 -->
+          <ellipse cx="196" cy="122" rx="27" ry="31" fill="url(#fig)"/>
+          <path d="M172 108 Q196 92 220 108 Q224 128 216 142 Q196 132 176 142 Q168 128 172 108 Z" fill="#1c222c"/>
+          <!-- 肩背与身体 -->
+          <path d="M196 150
+                   C 168 152, 148 172, 142 206
+                   C 138 236, 138 288, 140 320
+                   L 252 320
+                   C 254 288, 254 236, 250 206
+                   C 244 172, 224 152, 196 150 Z" fill="url(#fig)"/>
+          <!-- 手臂暗示 -->
+          <path d="M150 186 C 140 208, 136 250, 138 288" stroke="#0d1119" stroke-width="9"
+                fill="none" stroke-linecap="round" opacity=".85"/>
+          <path d="M242 186 C 252 208, 256 250, 254 288" stroke="#0d1119" stroke-width="9"
+                fill="none" stroke-linecap="round" opacity=".85"/>
+        </g>
+
+        <!-- 地面投影 -->
+        <ellipse cx="196" cy="308" rx="78" ry="12" fill="#5f7189" opacity=".28"/>
+
+        <!-- 暗角与颗粒 -->
+        <rect width="400" height="320" fill="url(#vig)"/>
+        <rect width="400" height="320" filter="url(#grain)" opacity=".05"/>
+      </svg>
+      <div class="cap">2022 · 那条走廊</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <section class="paras">
+
+    <p class="txt reveal">整理他遗物的时候，我在他枕头底下发现了一个本子。</p>
+
+    <p class="txt reveal">本子里夹着一张化验单，背面是他写的字：</p>
+
+    <p class="txt q reveal">“如果我好了，我就娶她。<br>如果我不好，就让她忘了我。”</p>
+
+    <p class="txt reveal">我把那张纸，还给了他媳妇。</p>
+
+    <p class="txt reveal">她抱着那张纸，在病房门口站了很久，一句话都没说。</p>
+
+    <p class="txt reveal">后来的很多个夜里，我都做同一个梦。</p>
+
+    <p class="txt b reveal">我梦见他在另一个世界，好好地活着。</p>
+
+    <p class="txt reveal">他结了婚，娶了那个扎马尾的姑娘。</p>
+
+    <p class="txt reveal">他们生了一个男孩，眉眼像他，也像她。</p>
+
+    <p class="txt reveal">他每天早起送孩子上学，傍晚在楼下等着。</p>
+
+    <p class="txt reveal">他活得很老很老，老到头发都白了，老到我认不出他。</p>
+
+    <p class="txt reveal">在梦里，他回过头，冲我笑了一下。</p>
+
+    <p class="txt q reveal">他说：妈，你看，我这不是好好的吗。</p>
+
+    <p class="txt reveal">我醒来的时候，枕头是湿的。</p>
+
+    <p class="txt reveal">可是很奇怪，我心里有一点点松。</p>
+
+    <p class="txt reveal">就一点点。</p>
+
+    <p class="txt b reveal">像是替他把那辈子，过完了。</p>
+
+    <p class="txt reveal">—— 全 文 完 ——</p>
+
+  </section>
+
+  <div class="footer">珍 爱 生 命 · 第 四 页</div>
+
+  <!-- 阅读完毕检测哨兵 -->
+  <div id="endSentinel" style="height:2px;width:100%;"></div>
+
+</main>
+
+<!-- 声音开关 -->
+<button class="sound-btn" id="soundBtn">♪ 开 启 声 音</button>
+
+<!-- 收尾层 -->
+<div class="final" id="final">
+  <div class="f-line">感谢你陪伴</div>
+  <div class="f-rule"></div>
+  <div class="f-line">祝你健康平安</div>
+  <div class="f-line">珍惜生命</div>
+  <div class="f-line">热爱生活</div>
+</div>
+
+<script>
+/* ============ 滚动浮现 ============ */
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+  });
+},{threshold:0.1});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+/* ============ 雨声 + 轻音乐（Web Audio 合成） ============ */
+let ctx = null, master = null, started = false;
+const soundBtn = document.getElementById('soundBtn');
+
+function startAudio(){
+  const AC = window.AudioContext || window.webkitAudioContext;
+  if(!AC) return;
+  ctx = new AC();
+
+  master = ctx.createGain();
+  master.gain.value = 0;
+  master.connect(ctx.destination);
+  master.gain.linearRampToValueAtTime(0.85, ctx.currentTime + 5);
+
+  /* ---- 雨声：过滤白噪声 ---- */
+  const len = Math.floor(ctx.sampleRate * 2.5);
+  const buf = ctx.createBuffer(1, len, ctx.sampleRate);
+  const d = buf.getChannelData(0);
+  for(let i=0;i<len;i++) d[i] = Math.random() * 2 - 1;
+
+  const rain = ctx.createBufferSource();
+  rain.buffer = buf; rain.loop = true;
+
+  const hp = ctx.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 320;
+  const lp = ctx.createBiquadFilter(); lp.type = 'lowpass';  lp.frequency.value = 1600;
+  const rg = ctx.createGain(); rg.gain.value = 0.055;
+
+  rain.connect(hp); hp.connect(lp); lp.connect(rg); rg.connect(master);
+  rain.start();
+
+  /* 雨声缓慢起伏，像呼吸 */
+  const lfo = ctx.createOscillator();
+  const lfoGain = ctx.createGain();
+  lfo.frequency.value = 0.07;
+  lfoGain.gain.value = 0.018;
+  lfo.connect(lfoGain); lfoGain.connect(rg.gain);
+  lfo.start();
+
+  /* ---- 轻音乐：柔和正弦音，A 小调五声音阶 ---- */
+  const scale = [220.00, 261.63, 293.66, 329.63, 392.00, 440.00, 523.25, 659.25];
+
+  function note(freq, t, dur, vol){
+    const o1 = ctx.createOscillator();
+    const o2 = ctx.createOscillator();
+    const g  = ctx.createGain();
+    const f  = ctx.createBiquadFilter();
+
+    o1.type = 'sine'; o2.type = 'sine';
+    o1.frequency.value = freq;
+    o2.frequency.value = freq * 2.002;
+
+    f.type = 'lowpass';
+    f.frequency.value = 2000;
+
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.linearRampToValueAtTime(vol, t + 0.12);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+
+    o1.connect(g); o2.connect(g);
+    g.connect(f); f.connect(master);
+
+    o1.start(t); o2.start(t);
+    o1.stop(t + dur + 0.2); o2.stop(t + dur + 0.2);
+  }
+
+  let step = 0;
+  function schedule(){
+    if(!ctx) return;
+    const t = ctx.currentTime + 0.12;
+    const n = 2 + Math.floor(Math.random() * 2);
+    for(let i=0;i<n;i++){
+      const idx = Math.floor(Math.random() * scale.length);
+      note(scale[idx], t + i * 0.85 + Math.random() * 0.5, 3.4, 0.042);
+    }
+    if(step % 3 === 0) note(110, t, 5.0, 0.028);
+    step++;
+  }
+  schedule();
+  setInterval(schedule, 3600);
+}
+
+soundBtn.addEventListener('click', ()=>{
+  if(started) return;
+  started = true;
+  try{
+    startAudio();
+    if(ctx && ctx.state === 'suspended') ctx.resume();
+  }catch(e){}
+  soundBtn.classList.add('hide');
+});
+
+/* ============ 阅读完毕 → 收尾 ============ */
+const finalEl = document.getElementById('final');
+const sentinel = document.getElementById('endSentinel');
+let endTimer = null;
+
+const eio = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      if(!endTimer) endTimer = setTimeout(finish, 4800);
+    }else{
+      clearTimeout(endTimer); endTimer = null;
+    }
+  });
+},{threshold:0.6});
+eio.observe(sentinel);
+
+let finished = false;
+function finish(){
+  if(finished) return;
+  finished = true;
+
+  /* 音乐缓缓淡出 */
+  if(ctx && master){
+    try{
+      master.gain.cancelScheduledValues(ctx.currentTime);
+      master.gain.setValueAtTime(master.gain.value, ctx.currentTime);
+      master.gain.linearRampToValueAtTime(0, ctx.currentTime + 5);
+    }catch(e){}
+  }
+
+  soundBtn.classList.add('hide');
+  finalEl.classList.add('on');
+
+  /* 页面滚回顶部 */
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+</script>
+
+</body>
+</html>
