@@ -173,7 +173,7 @@
     <p class="rp reveal">发热伴乏力、双下肢皮肤瘀点 3 天。</p>
 
     <h2 class="sec reveal"><span>二、现病史</span><span class="num">HISTORY OF PRESENT ILLNESS</span></h2>
-    <p class="rp reveal">患者男，19 岁，学生。入院前 3 天无明显诱因出现发热，最高体温 38.9℃，伴全身乏力、食欲减退，双下肢散在针尖样瘀点，无鼻衄、牙龈出血，无骨关节疼痛，无腹痛、腹泻。于外院查血常规示白细胞及血小板异常，为进一步诊治转入我院。</p>
+    <p class="rp reveal">患者男，16 岁，学生。入院前 3 天无明显诱因出现发热，最高体温 38.9℃，伴全身乏力、食欲减退，双下肢散在针尖样瘀点，无鼻衄、牙龈出血，无骨关节疼痛，无腹痛、腹泻。于外院查血常规示白细胞及血小板异常，为进一步诊治转入我院。</p>
     <p class="rp reveal">病程中神志清楚，精神欠佳，睡眠可，二便正常，体重无明显变化。</p>
 
     <h2 class="sec reveal"><span>三、既往史</span><span class="num">PAST HISTORY</span></h2>
@@ -238,14 +238,14 @@
     <div class="sign reveal">
       记录医师：<b>陆承安</b>　（血液内科）<br>
       审核医师：<b>陆承安</b>　（主任医师）<br>
-      记录日期：2022 年 1 月 14 日
+      记录日期：2021 年 1 月 14 日
     </div>
 
   </article>
 
   <!-- 解锁区 -->
   <div class="lock reveal">
-    <div class="lock-tip">他的愿望是 →</div>
+    <div class="lock-tip">他想看见 →</div>
     <div class="lock-row">
       <input id="pwd" type="text" maxlength="8" placeholder="— — — —">
       <button id="go">继 续</button>
@@ -294,11 +294,11 @@ function check(){
   const v = pwd.value.replace(/\s/g,'');
   if(v === '花好月圆'){
     err.style.color = '#123a72';
-    err.textContent = '验证通过……';
+    err.textContent = '验证通过，谢谢你陪伴的现在……';
     setTimeout(()=>{ window.location.href = 'he.html'; }, 650);
   }else{
     err.style.color = '#c0392b';
-    err.textContent = '不对哦。再看看他。';
+    err.textContent = '请再看看他的文字好吗？';
     pwd.value = '';
   }
 }
